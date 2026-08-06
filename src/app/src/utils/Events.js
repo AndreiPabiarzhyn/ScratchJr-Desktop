@@ -248,10 +248,21 @@ export default class Events {
         if (!el) {
             return;
         }
-        var mtx = new WebKitCSSMatrix(window.getComputedStyle(el).webkitTransform);
-        el.top = dy + mtx.m42;
-        el.left = dx + mtx.m41;
+        // Was: re-derive the current position every frame from
+        // getComputedStyle(el).webkitTransform via WebKitCSSMatrix. For a
+        // block dragged straight off the palette, el is a div created and
+        // given its first transform in the same synchronous tick as this
+        // first call - the browser hasn't necessarily flushed that style
+        // yet, so the computed read-back could come back as the identity
+        // matrix (0,0), snapping the drag ghost away from the cursor for
+        // the rest of the drag (only fixed up once the drop logic
+        // repositions it on mouseup). el.top/el.left (set by
+        // Block.moveBlock on creation, and kept in sync below) are always
+        // current without depending on a style read-back timing.
+        el.top = dy + (el.top || 0);
+        el.left = dx + (el.left || 0);
         el.style.webkitTransform = 'translate3d(' + el.left + 'px,' + el.top + 'px, 0)';
+        el.style.transform = 'translate3d(' + el.left + 'px,' + el.top + 'px, 0)';
     }
 
 
