@@ -18,12 +18,32 @@
 <div class="libframe" id="libframe"></div>
 <div class="paintframe" id="paintframe"></div>
 
-<!-- M6: quick access to whole-library backup/restore without leaving the editor -->
-<div style="position:fixed; bottom:8px; right:8px; z-index:99999; font-family:sans-serif; font-size:12px;">
-    <button id="backupDownloadBtn" type="button" style="margin-right:4px;">Скачать резервную копию</button>
-    <button id="backupRestoreBtn" type="button">Загрузить из файла</button>
-    <input id="backupRestoreInput" type="file" accept=".sqlite" style="display:none;">
-</div>
+<!-- M6: quick access to whole-library backup/restore without leaving the
+     editor. Styled to match the app's own round toolbar icons (blue circle,
+     white glyph, drop shadow - see assets/ui/resetAll.svg etc.) rather than
+     plain form controls. Positioned in the gap between the home button and
+     the stage tools, since that area is otherwise empty in this page. -->
+<style>
+    .backupButton {
+        position: fixed;
+        top: 6px;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background-size: 100%;
+        background-repeat: no-repeat;
+        cursor: pointer;
+        z-index: 99999;
+        border: none;
+        padding: 0;
+    }
+    .backupButton:active { transform: scale(0.93); }
+    #backupDownloadBtn { left: 110px; background-image: url('assets/ui/backupDownload.svg'); }
+    #backupRestoreBtn { left: 164px; background-image: url('assets/ui/backupRestore.svg'); }
+</style>
+<button id="backupDownloadBtn" class="backupButton" type="button" title="Скачать резервную копию всех проектов"></button>
+<button id="backupRestoreBtn" class="backupButton" type="button" title="Загрузить резервную копию из файла"></button>
+<input id="backupRestoreInput" type="file" accept=".sqlite" style="display:none;">
 <script type="module">
 import Backup from './src/utils/Backup.js';
 document.getElementById('backupDownloadBtn').onclick = () => Backup.download();

@@ -9,9 +9,10 @@
 <title>ScratchJr</title>
 <link rel="icon" href="assets/icon/icon.ico">
 <script>
-    window.scratchJrPage = 'index';
+    // Go straight to "My Projects" - skip the splash screen so kids don't
+    // need an extra tap to get started.
+    window.location.replace('home.html');
 </script>
-<script type="module" src="appEntry.js"></script>
 </head>
 <body style="margin:0px; background: black;">
     <div class="frame" id="frame">
