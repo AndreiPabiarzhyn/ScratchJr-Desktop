@@ -94,6 +94,13 @@ export default class ScriptsPane {
         Events.dragcanvas.starty = mtx.m42;
         if (!Events.dragcanvas.isReporter && Events.dragcanvas.parentNode) {
             Events.dragcanvas.parentNode.removeChild(Events.dragcanvas);
+            // move3D adds (mx, my) onto the block's last known top/left, but
+            // mx/my here are already the absolute target position (not a
+            // delta) - the block is being picked up from wherever it sat in
+            // its script (a nonzero offset), so that stale offset must be
+            // cleared first or it gets added in twice.
+            Events.dragcanvas.top = 0;
+            Events.dragcanvas.left = 0;
         }
         Events.move3D(Events.dragcanvas, mx, my);
         Events.dragcanvas.style.zIndex = ScratchJr.dragginLayer;
