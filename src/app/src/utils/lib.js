@@ -673,6 +673,17 @@ export function css_vw (x) {
     return (x *  window.innerWidth / 100.0) + 'px';
 }
 
+// preprocess() (above) eval()s these by bare name - they're referenced only
+// as text inside css/*.css files (e.g. `${css_vw(21.68)}`), so a bundler's
+// minifier has no way to know they're used and renames the local bindings in
+// production builds, breaking the eval lookup (ReferenceError: css_vw is not
+// defined). Exposing them as globalThis properties survives minification -
+// property names are never mangled, only variable/function names are - and
+// bare-identifier lookups in eval'd code fall through to the global object.
+globalThis.css_vh = css_vh;
+globalThis.css_vw = css_vw;
+globalThis.scaleMultiplier = scaleMultiplier;
+
 Number.prototype.mod = function (n) {  // eslint-disable-line no-extend-native
     return ((this % n) + n) % n;
 };
