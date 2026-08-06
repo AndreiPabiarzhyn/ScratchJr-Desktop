@@ -24,11 +24,14 @@
      plain form controls. Positioned in the gap between the home button and
      the stage tools, since that area is otherwise empty in this page. -->
 <style>
+    /* vh-based, like the rest of this page's chrome (see css/editorstage.css's
+       css_vw/css_vh use) - a fixed px offset only clears the home/logo cluster
+       at one particular window size and overlaps it at others. */
     .backupButton {
         position: fixed;
-        top: 6px;
-        width: 48px;
-        height: 48px;
+        top: 1vh;
+        width: 6vh;
+        height: 6vh;
         border-radius: 50%;
         background-size: 100%;
         background-repeat: no-repeat;
@@ -38,8 +41,8 @@
         padding: 0;
     }
     .backupButton:active { transform: scale(0.93); }
-    #backupDownloadBtn { left: 110px; background-image: url('assets/ui/backupDownload.svg'); }
-    #backupRestoreBtn { left: 164px; background-image: url('assets/ui/backupRestore.svg'); }
+    #backupDownloadBtn { left: 38vh; background-image: url('assets/ui/backupDownload.svg'); }
+    #backupRestoreBtn { left: 46vh; background-image: url('assets/ui/backupRestore.svg'); }
 </style>
 <button id="backupDownloadBtn" class="backupButton" type="button" title="Скачать резервную копию всех проектов"></button>
 <button id="backupRestoreBtn" class="backupButton" type="button" title="Загрузить резервную копию из файла"></button>

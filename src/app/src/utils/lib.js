@@ -63,33 +63,34 @@ export function preprocessAndLoad (url) {
 }
 
 /**
- * Load a CSS file, preprocess it using preprocessAndLoad() and then returns it as a style tag.
- * Also rewrites all instances of url() with a different base
+ * Load a list of CSS files concurrently (via fetch) and inject them as
+ * <style> tags, instead of one at a time via blocking synchronous XHR. A
+ * page like editor.html loads 7 CSS files - over a real network (unlike the
+ * original app's file:// access, where synchronous loads are effectively
+ * free) loading them one at a time blocks the page for the sum of 7 round
+ * trips instead of the slowest single one. Style tags are still appended in
+ * the given order, so the CSS cascade behaves the same as loading them
+ * one-by-one.
  */
-export function preprocessAndLoadCss (baseUrl, url) {
-
-	// write the url into the tag so we don't keep loading styles <style id='url'>
-	// into the head tag
-	let existingStyleElement = document.getElementById(url);
-	if (existingStyleElement) {
-		return;
-	}
-
-    var cssData = preprocessAndLoad(url);
-    cssData = cssData.replace(/url\('/g, 'url(\'' + baseUrl + '/');
-    cssData = cssData.replace(/url\(([^'])/g, 'url(' + baseUrl + '/$1');
-
-    const head = document.head;
-    let style = document.createElement('style');
-    style.id = url;
-    style.type = 'text/css';
-    
-    if (style.styleSheet){
-        style.styleSheet.cssText = cssData;
-    } else {
-        style.appendChild(document.createTextNode(cssData));
-    }
-    head.appendChild(style);
+export function preprocessAndLoadCssFiles (baseUrl, urls, whenDone) {
+    Promise.all(urls.map((url) => {
+        if (document.getElementById(url)) return null;
+        return fetch(url).then((response) => response.text()).then((text) => ({url, text}));
+    })).then((loaded) => {
+        const head = document.head;
+        loaded.forEach((entry) => {
+            if (!entry) return;
+            let cssData = preprocess(entry.text);
+            cssData = cssData.replace(/url\('/g, 'url(\'' + baseUrl + '/');
+            cssData = cssData.replace(/url\(([^'])/g, 'url(' + baseUrl + '/$1');
+            const style = document.createElement('style');
+            style.id = entry.url;
+            style.type = 'text/css';
+            style.appendChild(document.createTextNode(cssData));
+            head.appendChild(style);
+        });
+        if (whenDone) whenDone();
+    });
 }
 
 export function rl () {
