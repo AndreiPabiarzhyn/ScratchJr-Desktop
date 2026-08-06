@@ -1,5 +1,34 @@
 /* toolbar */
 
+/* M6: whole-library backup/restore. Tucked into the two small gaps already
+   left between the existing tool icons (grid ends 21.87vh, changeBkg starts
+   29.30vh; addText ends 46.22vh, resetall starts 53.13vh) instead of a
+   floating overlay - sized down slightly (6.5vh vs the usual 8.33vh) so they
+   fit those gaps with a small margin either side. */
+.backupDownload {
+    position: absolute;
+    margin: 0px;
+    padding: 0px;
+    top: ${css_vh(1.57)};
+    left: ${css_vh(22.34)};
+    width: ${css_vh(6.5)};
+    height: ${css_vh(6.5)};
+    background: url('../assets/ui/backupDownload.svg');
+    background-size: 100%;
+}
+
+.backupRestore {
+    position: absolute;
+    margin: 0px;
+    padding: 0px;
+    top: ${css_vh(1.57)};
+    left: ${css_vh(46.43)};
+    width: ${css_vh(6.5)};
+    height: ${css_vh(6.5)};
+    background: url('../assets/ui/backupRestore.svg');
+    background-size: 100%;
+}
+
 .fullscreen#full {
     position: absolute;
     margin: 0px;

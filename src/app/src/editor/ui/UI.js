@@ -20,6 +20,7 @@ import Paint from '../../painteditor/Paint';
 import Events from '../../utils/Events';
 import Localization from '../../utils/Localization';
 import ScratchAudio from '../../utils/ScratchAudio';
+import Backup from '../../utils/Backup';
 import {frame, gn, CSSTransition, localx, newHTML, scaleMultiplier, getIdFor, isTablet, newDiv,
     newTextInput, isAndroid, getDocumentWidth, getDocumentHeight, setProps, globalx} from '../../utils/lib';
 
@@ -706,7 +707,38 @@ export default class UI {
         UI.creatTopBarClicky(div, 'go', 'go on', UI.toggleRun);
         UI.creatTopBarClicky(div, 'resetall', 'resetall', UI.resetAllSprites);
         UI.creatTopBarClicky(div, 'full', 'fullscreen', ScratchJr.fullScreen);
+        UI.creatTopBarClicky(div, 'backupdownload', 'backupDownload', UI.downloadBackup);
+        UI.creatTopBarClicky(div, 'backuprestore', 'backupRestore', UI.triggerRestoreBackup);
+        UI.addBackupRestoreInput(div);
         UI.toggleGrid(true);
+    }
+
+    // M6: whole-library backup/restore, reachable from the same toolbar row
+    // as the other stage tools (fullscreen/grid/etc.) instead of a floating
+    // overlay positioned by guesswork.
+    static downloadBackup (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        ScratchAudio.sndFX('tap.wav');
+        Backup.download();
+    }
+
+    static triggerRestoreBackup (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        ScratchAudio.sndFX('tap.wav');
+        gn('backuprestoreinput').click();
+    }
+
+    static addBackupRestoreInput (div) {
+        var input = newHTML('input', undefined, div);
+        input.setAttribute('id', 'backuprestoreinput');
+        input.type = 'file';
+        input.accept = '.sqlite';
+        input.style.display = 'none';
+        input.onchange = function () {
+            if (input.files[0]) Backup.restore(input.files[0]);
+        };
     }
 
     static resetAllSprites (e) {

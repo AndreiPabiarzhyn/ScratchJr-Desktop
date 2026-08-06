@@ -18,50 +18,5 @@
 <div class="libframe" id="libframe"></div>
 <div class="paintframe" id="paintframe"></div>
 
-<!-- M6: quick access to whole-library backup/restore without leaving the
-     editor. Styled to match the app's own round toolbar icons (blue circle,
-     white glyph, drop shadow - see assets/ui/resetAll.svg etc.) rather than
-     plain form controls. Positioned in the gap between the home button and
-     the stage tools, since that area is otherwise empty in this page. -->
-<style>
-    /* vh-based, like the rest of this page's chrome (see css/editorstage.css's
-       css_vw/css_vh use) - a fixed px offset only clears the home/logo cluster
-       at one particular window size and overlaps it at others. */
-    .backupButton {
-        appearance: none;
-        -webkit-appearance: none;
-        position: fixed;
-        top: 1vh;
-        width: 6vh;
-        height: 6vh;
-        border-radius: 50%;
-        background-color: transparent;
-        background-size: 100%;
-        background-repeat: no-repeat;
-        cursor: pointer;
-        z-index: 99999;
-        border: none;
-        outline: none;
-        box-shadow: none;
-        padding: 0;
-        margin: 0;
-    }
-    .backupButton:active { transform: scale(0.93); }
-    .backupButton::-moz-focus-inner { border: 0; }
-    #backupDownloadBtn { left: 38vh; background-image: url('assets/ui/backupDownload.svg'); }
-    #backupRestoreBtn { left: 46vh; background-image: url('assets/ui/backupRestore.svg'); }
-</style>
-<button id="backupDownloadBtn" class="backupButton" type="button" title="Скачать резервную копию всех проектов"></button>
-<button id="backupRestoreBtn" class="backupButton" type="button" title="Загрузить резервную копию из файла"></button>
-<input id="backupRestoreInput" type="file" accept=".sqlite" style="display:none;">
-<script type="module">
-import Backup from './src/utils/Backup.js';
-document.getElementById('backupDownloadBtn').onclick = () => Backup.download();
-document.getElementById('backupRestoreBtn').onclick = () => document.getElementById('backupRestoreInput').click();
-document.getElementById('backupRestoreInput').onchange = (e) => {
-    if (e.target.files[0]) Backup.restore(e.target.files[0]);
-};
-</script>
-
 </body>
 </html>
