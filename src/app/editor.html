@@ -28,19 +28,26 @@
        css_vw/css_vh use) - a fixed px offset only clears the home/logo cluster
        at one particular window size and overlaps it at others. */
     .backupButton {
+        appearance: none;
+        -webkit-appearance: none;
         position: fixed;
         top: 1vh;
         width: 6vh;
         height: 6vh;
         border-radius: 50%;
+        background-color: transparent;
         background-size: 100%;
         background-repeat: no-repeat;
         cursor: pointer;
         z-index: 99999;
         border: none;
+        outline: none;
+        box-shadow: none;
         padding: 0;
+        margin: 0;
     }
     .backupButton:active { transform: scale(0.93); }
+    .backupButton::-moz-focus-inner { border: 0; }
     #backupDownloadBtn { left: 38vh; background-image: url('assets/ui/backupDownload.svg'); }
     #backupRestoreBtn { left: 46vh; background-image: url('assets/ui/backupRestore.svg'); }
 </style>
