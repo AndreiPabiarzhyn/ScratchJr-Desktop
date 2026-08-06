@@ -82,6 +82,13 @@ export default class UI {
         UI.leftPanel(div);
         UI.stageArea(div);
         UI.rightPanel(div);
+        // Appended last (after centerpanel) so they paint on top of it in
+        // the gap between the sprite panel and the stage - centerpanel is
+        // width:100% and, despite being visually empty there, intercepts
+        // clicks meant for anything earlier in DOM order underneath it.
+        UI.creatTopBarClicky(div, 'backupdownload', 'backupDownload', UI.downloadBackup);
+        UI.creatTopBarClicky(div, 'backuprestore', 'backupRestore', UI.triggerRestoreBackup);
+        UI.addBackupRestoreInput(div);
     }
 
     static leftPanel (div) {
@@ -707,9 +714,6 @@ export default class UI {
         UI.creatTopBarClicky(div, 'go', 'go on', UI.toggleRun);
         UI.creatTopBarClicky(div, 'resetall', 'resetall', UI.resetAllSprites);
         UI.creatTopBarClicky(div, 'full', 'fullscreen', ScratchJr.fullScreen);
-        UI.creatTopBarClicky(div, 'backupdownload', 'backupDownload', UI.downloadBackup);
-        UI.creatTopBarClicky(div, 'backuprestore', 'backupRestore', UI.triggerRestoreBackup);
-        UI.addBackupRestoreInput(div);
         UI.toggleGrid(true);
     }
 
