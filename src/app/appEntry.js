@@ -1,3 +1,4 @@
+import './src/webClient.js';
 import {preprocessAndLoadCss} from './src/utils/lib.js';
 import Localization from './src/utils/Localization.js';
 import AppUsage from './src/utils/AppUsage.js';

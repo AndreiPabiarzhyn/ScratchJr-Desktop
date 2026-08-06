@@ -1,78 +1,59 @@
 ## Official disclaimer
 Scratch and ScratchJr are trademarks of Massachusetts Institute of Technology, which does not sponsor, endorse, or authorize this content. See scratchjr.org for more information.
 
-## Downloads 
-[Download ScratchJr for Desktop](https://jfo8000.github.io/ScratchJr-Desktop/)
+## Play it
+Once deployed (see "Building" below), this runs as a website - no download needed.
 
 
 ## The geeky stuff
 
-This repository contains a port of ScratchJr for Desktop. 
+This repository contains a port of ScratchJr to the web: a static site that
+runs entirely in the browser, with no backend and no install step.
 
-It has been ported with love from the iPad / Android editions to Mac/Windows
-as an independent, open source community project.
-
+It has been ported with love from the iPad / Android editions (by way of an
+earlier Electron desktop port) as an independent, open source community
+project.
 
 If you are looking for the Official ScratchJr build from MIT for Android and iPad, visit
 the LLK/ScratchJr (https://github.com/LLK/scratchjr) repository.
 
-## About Electron and Electron Forge
-
-This port makes use of Electron to host the ScratchJR HTML5 application on Mac and Windows.
-
-Electron (https://electronjs.org/) is a framework for creating native applications with web technologies like JavaScript, HTML, and CSS.   
-
-Electron Forge (https://electronforge.io/) stitches together several electron modules to provide easier support for using the latest version 
-of javascript, making dmg/exe files and installers.     
-
-
 ## Architecture Overview
 
-![Scratch Jr. Architecture Diagram](docs/scratchjr_electron_overview.png)
-
-* The HTML5 side of Scratch Jr very close to the original ios / android versions.  Some changes had to be made to load modules correctly inside of the electron environment.  
+* The HTML5 side of ScratchJr is very close to the original iOS / Android versions.
 * Minor changes were made to the CSS stylesheets to support resizing.
 * Touch events were translated to mouse events.
+* [PLAN.md](PLAN.md) has the full history and rationale of the web port.
 
- 
-## ElectronDesktopInterface as a third tabletInterface
+## WebTabletInterface as a third tabletInterface
 
-The original html implementation called out to a tabletInterface to make calls to 
-the host operating system (Android / iOS) for filesystem access and audio and video recording.
+The original html implementation called out to a tabletInterface to make calls to
+the host platform (Android / iOS) for storage and audio/video recording.
 
- 
-ElectronDesktopInterface handles these calls and either handles them itself in HTML5 
-(e.g. audio and video recording are achieved through the HTML5 WebRTC apis) or passes them
-onto the electron main process to read and write files / db.
+`WebTabletInterface` (`src/app/src/webClient.js`) implements this for the
+browser: audio/video recording use the HTML5 WebRTC APIs directly, and
+storage goes through `src/app/src/webDb.js` - a `sql.js` (WASM) database
+persisted to IndexedDB.
 
+## Sql.js
 
- 
-## Sql.js 
-
-As the database is rather small we were able to use a version of SQLLite that has been compiled into JavaScript.
-
-
-The database is largely the same format as the original ios / android version, but it adds
-a third table called PROJECTFILES.  Instead of writing individual svg, video, and audio files out to 
-the filesystem they are all stored within the PROJECTFILES table.   This was done so that
-you can make a set of Scratch Jr projects as a starter kit. 
+The database is largely the same format as the original iOS / Android version, but it adds
+a third table called PROJECTFILES. Instead of writing individual svg, video, and audio files out to
+a filesystem, they are all stored within the PROJECTFILES table - this also means the whole
+library (projects + media) is one sqlite file, which can be exported/imported as a backup
+(see the "Backup" section of the settings screen, or the buttons in the editor).
 
 ## Building
 
 You will need node.js installed. (https://nodejs.org/en/)
 Also git (which you may already have).
 
-
 * <tt>npm install</tt>
-* <tt>npm run start</tt>
+* <tt>npm run dev</tt> - starts a local dev server (Vite) with hot reload
+* <tt>npm run build</tt> - builds the static site into <tt>dist/</tt>
+* <tt>npm run preview</tt> - serves the built <tt>dist/</tt> locally
 
-
-## Packaging for Windows / Mac
-
-For windows installers, you must do this from a Windows machine.  Same for Mac.
-
-* <tt>npm run package</tt>
-
+Pushes to <tt>master</tt> deploy <tt>dist/</tt> to GitHub Pages automatically
+(<tt>.github/workflows/deploy.yml</tt>).
 
 ## Running lint
 
@@ -81,34 +62,17 @@ several style rules had to be adapted to avoid changing the original scratch sou
 
 * <tt>npm run lint</tt>
 
-
 ## Debugging
 
-To debug the html files, audio and video recording you can simply run
-* <tt>npm run start</tt>
-
-A chrome inspector window will appear by default.
-
-To debug writing to the filesystem and database queries, you need to debug the main 
-electron process.  This is done by 
-
-* <tt>npm run debugMain</tt>
-
-To get the chrome inspector window, open another instance of the real chrome on your computer
-and navigate to chrome://inspect
-
-There should be a listing there for the electron main process.
-Note between debugging sessions you may have to close and reopen this chrome://inspect window.
-
+<tt>npm run dev</tt> and open the printed localhost URL - use your browser's
+own devtools for everything (console, storage/IndexedDB inspector, network).
 
 ## Directory Structure and Projects
 This repository has the following directory structure:
 
-* <tt>package.json</tt> - Contains eslint rules, modules used, build and packaging scripts
-* <tt>forge.config.js</tt> - Contains rules for packaging for windows and Mac
-* <tt>src/app/</tt> - Shared JavaScript code for iOS and Android and Desktop common client. This is where most changes should be made for features, bug fixes, UI, etc.
-* <tt>src/icons/</tt> - Icons for Mac / Windows and ( in theory Linux  NYI) 
-* <tt>out/</tt> - Build scripts and other executables
+* <tt>package.json</tt> - Contains eslint rules, modules used, and build scripts
+* <tt>vite.config.js</tt> - Build configuration (multi-page app: index/home/editor/gettingstarted)
+* <tt>src/app/</tt> - The application: HTML entry pages, <tt>src/</tt> (editor/lobby/painteditor/etc, shared with the original iOS/Android/Electron versions), <tt>public/</tt> (static assets served as-is)
 * <tt>docs/</tt> - Developer Documentation
 
 
@@ -117,9 +81,7 @@ This repository has the following directory structure:
 Thank you to the official Scratch team and their supporters.  Their contributions are listed here:
 https://github.com/LLK/scratchjr
 
-In addition, thank you to the folks working on Electron, ElectronForge, and Sql.js.
-
-Thank you to AppVeyor and Travis CL for providing Mac, Windows and Linux builds.
+In addition, thank you to the folks working on Sql.js and Vite.
 
 
 ## Disclaimers

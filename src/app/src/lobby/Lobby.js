@@ -7,6 +7,7 @@ import ScratchAudio from '../utils/ScratchAudio';
 import iOS from '../iPad/iOS';
 import Localization from '../utils/Localization';
 import Cookie from '../utils/Cookie';
+import Backup from '../utils/Backup';
 
 import Home from './Home';
 import Samples from './Samples';
@@ -207,6 +208,39 @@ export default class Lobby {
                 window.location = '?place=gear';
             };
         }
+
+        Lobby.addBackupSection(div);
+    }
+
+    // M6: there's no filesystem here (IndexedDB-only) - offer a manual
+    // download/upload of the underlying sqlite file as a backup/transfer
+    // mechanism, since a cleared browser cache would otherwise lose everything.
+    static addBackupSection (div) {
+        var title = newHTML('h1', 'localizationtitle', div);
+        title.textContent = Localization.localize('BACKUP_TITLE');
+
+        var buttons = newHTML('div', 'languagebuttons', div);
+
+        var downloadButton = newHTML('div', 'localizationselect', buttons);
+        downloadButton.textContent = Localization.localize('BACKUP_DOWNLOAD');
+        downloadButton.onmousedown = function () {
+            ScratchAudio.sndFX('tap.wav');
+            Backup.download();
+        };
+
+        var restoreButton = newHTML('div', 'localizationselect', buttons);
+        restoreButton.textContent = Localization.localize('BACKUP_RESTORE');
+        var fileInput = newHTML('input', undefined, buttons);
+        fileInput.type = 'file';
+        fileInput.accept = '.sqlite';
+        fileInput.style.display = 'none';
+        restoreButton.onmousedown = function () {
+            ScratchAudio.sndFX('tap.wav');
+            fileInput.click();
+        };
+        fileInput.onchange = function () {
+            if (fileInput.files[0]) Backup.restore(fileInput.files[0]);
+        };
     }
 
     static setSubMenu (page) {

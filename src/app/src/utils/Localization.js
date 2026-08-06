@@ -1,13 +1,8 @@
 import Intl from 'intl';
-import IntlMessageFormat  from 'intl-messageformat';
+import IntlMessageFormat from './intlMessageFormatGlobal.js';
 
 import Cookie from './Cookie';
 import IO from '../iPad/IO';
-
-
-// the subsquent requires need IntlMessageFormat defined - 
-// so pop it in the global namespace.
-global.IntlMessageFormat = IntlMessageFormat;
 
 
 
@@ -16,34 +11,31 @@ if (!window.Intl) {
 }
 
 
-require('intl/locale-data/jsonp/ca.js');
-require('intl/locale-data/jsonp/de.js');
-require('intl/locale-data/jsonp/en.js');
-require('intl/locale-data/jsonp/es.js');
-require('intl/locale-data/jsonp/fr.js');
-require('intl/locale-data/jsonp/it.js');
-require('intl/locale-data/jsonp/nl.js');
-require('intl/locale-data/jsonp/ja.js');
-require('intl/locale-data/jsonp/pt.js');
-require('intl/locale-data/jsonp/sv.js');
-require('intl/locale-data/jsonp/th.js');
-require('intl/locale-data/jsonp/zh.js');
+import 'intl/locale-data/jsonp/ca.js';
+import 'intl/locale-data/jsonp/de.js';
+import 'intl/locale-data/jsonp/en.js';
+import 'intl/locale-data/jsonp/es.js';
+import 'intl/locale-data/jsonp/fr.js';
+import 'intl/locale-data/jsonp/it.js';
+import 'intl/locale-data/jsonp/nl.js';
+import 'intl/locale-data/jsonp/ja.js';
+import 'intl/locale-data/jsonp/pt.js';
+import 'intl/locale-data/jsonp/sv.js';
+import 'intl/locale-data/jsonp/th.js';
+import 'intl/locale-data/jsonp/zh.js';
 
-//require('expose?IntlMessageFormat!intl-messageformat');
-
-
-require('intl-messageformat/dist/locale-data/ca');
-require('intl-messageformat/dist/locale-data/de');
-require('intl-messageformat/dist/locale-data/en');
-require('intl-messageformat/dist/locale-data/es');
-require('intl-messageformat/dist/locale-data/fr');
-require('intl-messageformat/dist/locale-data/it');
-require('intl-messageformat/dist/locale-data/nl');
-require('intl-messageformat/dist/locale-data/ja');
-require('intl-messageformat/dist/locale-data/pt');
-require('intl-messageformat/dist/locale-data/sv');
-require('intl-messageformat/dist/locale-data/th');
-require('intl-messageformat/dist/locale-data/zh');
+import 'intl-messageformat/dist/locale-data/ca';
+import 'intl-messageformat/dist/locale-data/de';
+import 'intl-messageformat/dist/locale-data/en';
+import 'intl-messageformat/dist/locale-data/es';
+import 'intl-messageformat/dist/locale-data/fr';
+import 'intl-messageformat/dist/locale-data/it';
+import 'intl-messageformat/dist/locale-data/nl';
+import 'intl-messageformat/dist/locale-data/ja';
+import 'intl-messageformat/dist/locale-data/pt';
+import 'intl-messageformat/dist/locale-data/sv';
+import 'intl-messageformat/dist/locale-data/th';
+import 'intl-messageformat/dist/locale-data/zh';
 
 
 let currentLocale;
